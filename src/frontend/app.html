@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .nav-btn:hover {
+            background: #45a049;
+        }
+        
+        .nav-btn.active {
+            background: #2196F3;
+        }
+        
+        .auth-status {
+            margin-left: auto;
+            padding: 10px;
+            color: white;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            min-height: 400px;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #1976D2;
+        }
+        
+        .btn-danger {
+            background: #f44336;
+        }
+        
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+        
+        .btn-success {
+            background: #4CAF50;
+        }
+        
+        .btn-success:hover {
+            background: #45a049;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .table thead,
+        .table tbody,
+        .table tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        
+        .table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Responsividade para tabelas */
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+            width: 100%;
+        }
+        
+        .admin-section {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-section h3 {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        
+        .alert-error {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .product-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: transform 0.2s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .restricted-area {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .table {
+                font-size: 12px;
+                min-width: 500px;
+            }
+            
+            .table th,
+            .table td {
+                padding: 8px 4px;
+                min-width: 60px;
+            }
+            
+            .admin-section {
+                margin-bottom: 1.5rem;
+            }
+            
+            .auth-status {
+                margin: 10px 0 !important;
+                margin-left: 0 !important;
+            }
+            
+            .header {
+                padding: 1rem 0;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Sistema de Gestão</h1>
+            <p>Plataforma Moderna de Gerenciamento</p>
+        </div>
+        
+        <div class="nav">
+            <button class="nav-btn active" onclick="showSection('home')">🏠 Home</button>
+            <button class="nav-btn" onclick="showSection('produtos')">📦 Produtos</button>
+            <button class="nav-btn" onclick="showSection('login')" id="login-btn">🔐 Área Restrita</button>
+            <div class="auth-status" id="auth-status" onclick="handleAuthClick()">
+                ⏳ Verificando...
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Seção Home -->
+            <div id="home" class="section active">
+                <h2>🏠 Bem-vindo ao Sistema</h2>
+                <p>Esta é uma plataforma moderna para gerenciamento de produtos, usuários e clientes.</p>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>📦 Produtos</h3>
+                        <p>Visualize nossa lista completa de produtos disponíveis.</p>
+                        <button class="btn btn-success" onclick="showSection('produtos')">Ver Produtos</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>🔐 Área Restrita</h3>
+                        <p>Acesse funcionalidades administrativas com login.</p>
+                        <button class="btn" onclick="showSection('login')">Fazer Login</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>ℹ️ Sobre o Sistema</h3>
+                    <ul style="margin-top: 1rem; line-height: 1.8;">
+                        <li>✅ Visualização pública de produtos</li>
+                        <li>✅ Área administrativa protegida</li>
+                        <li>✅ Gerenciamento de usuários e clientes</li>
+                        <li>✅ Interface moderna e responsiva</li>
+                    </ul>
+                    
+                    <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <strong>🔑 Login de Teste:</strong>
+                        <br>Usuário: <code>usuario_teste</code>
+                        <br>Senha: <code>senha_teste</code>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção Produtos -->
+            <div id="produtos" class="section">
+                <h2>📦 Catálogo de Produtos</h2>
+                <p>Confira nossa lista completa de produtos disponíveis.</p>
+                
+                <div id="produtos-lista" class="loading">
+                    ⏳ Carregando produtos...
+                </div>
+            </div>
+            
+            <!-- Seção Login -->
+            <div id="login" class="section">
+                <h2>🔐 Área Restrita</h2>
+                
+                <div id="login-form-container">
+                    <div class="login-form">
+                        <h3>Autenticação</h3>
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label for="usuario">Usuário:</label>
+                                <input type="text" id="usuario" name="usuario" placeholder="seu_usuario" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="senha">Senha:</label>
+                                <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
+                            </div>
+                            <button type="submit" class="btn btn-success" style="width: 100%;">🚀 Entrar</button>
+                        </form>
+                        <div id="login-result" style="margin-top: 1rem;"></div>
+                    </div>
+                </div>
+                
+                <div id="admin-area" style="display: none;">
+                    <div class="restricted-area">
+                        <h3>✅ Área Administrativa</h3>
+                        <p>Bem-vindo! Você está logado no sistema.</p>
+                        <button class="btn btn-danger" onclick="logout()">🚪 Sair</button>
+                    </div>
+                    
+                    <!-- Seção de Usuários -->
+                    <div class="card" style="width: 100%; margin-bottom: 2rem;">
+                        <h3>👥 Usuários</h3>
+                        <button class="btn" onclick="loadUsers()">Ver Usuários</button>
+                        <div id="usuarios-lista" style="margin-top: 1rem;"></div>
+                    </div>
+                    
+                    <!-- Seção de Clientes -->
+                    <div class="card" style="width: 100%; margin-bottom: 2rem;">
+                        <h3>🏢 Clientes</h3>
+                        <button class="btn" onclick="loadClients()">Ver Clientes</button>
+                        <div id="clientes-lista" style="margin-top: 1rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado da aplicação
+        let currentUser = null;
+        let authToken = null;
+
+        // Funções de navegação
+        function showSection(sectionId) {
+            console.log('Navegando para seção:', sectionId);
+            
+            // Esconder todas as seções
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Mostrar seção selecionada
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            } else {
+                console.error('Seção não encontrada:', sectionId);
+                return;
+            }
+            
+            // Atualizar botões ativos
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+            
+            // Carregar dados específicos da seção
+            if (sectionId === 'produtos') {
+                loadProducts();
+            } else if (sectionId === 'login') {
+                // Configurar event listener se não estiver configurado
+                setTimeout(() => {
+                    const loginForm = document.getElementById('login-form');
+                    if (loginForm && !loginForm.hasAttribute('data-listener-added')) {
+                        loginForm.addEventListener('submit', handleLogin);
+                        loginForm.setAttribute('data-listener-added', 'true');
+                        console.log('Event listener do login configurado via navegação');
+                    }
+                }, 100);
+            }
+        }
+
+        // Função para mostrar notificações
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type}`;
+            toast.textContent = message;
+            toast.style.position = 'fixed';
+            toast.style.top = '20px';
+            toast.style.right = '20px';
+            toast.style.zIndex = '9999';
+            toast.style.maxWidth = '300px';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Função para fazer requisições API
+        async function apiRequest(url, options = {}) {
+            const defaultOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(authToken && { 'Authorization': `Bearer ${authToken}` })
+                }
+            };
+            
+            const finalOptions = { ...defaultOptions, ...options };
+            if (finalOptions.headers) {
+                finalOptions.headers = { ...defaultOptions.headers, ...options.headers };
+            }
+            
+            try {
+                const response = await fetch(url, finalOptions);
+                
+                if (!response.ok) {
+                    let errorMessage = 'Erro na requisição';
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.mensagem || errorMessage;
+                    } catch (e) {
+                        errorMessage = `Erro ${response.status}: ${response.statusText}`;
+                    }
+                    throw new Error(errorMessage);
+                }
+                
+                // Verificar se é JSON válido
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return await response.json();
+                } else {
+                    // Se não é JSON, retornar como texto
+                    return await response.text();
+                }
+                
+            } catch (error) {
+                console.error('Erro na API:', error);
+                throw error;
+            }
+        }
+
+        // Carregar produtos (público)
+        async function loadProducts() {
+            const container = document.getElementById('produtos-lista');
+            container.innerHTML = '<div class="loading">⏳ Carregando produtos...</div>';
+            
+            try {
+                const produtos = await apiRequest('/produtos');
+                
+                if (produtos.length === 0) {
+                    container.innerHTML = '<div class="alert alert-error">Nenhum produto encontrado.</div>';
+                    return;
+                }
+                
+                const html = `
+                    <div class="product-grid">
+                        ${produtos.map(produto => `
+                            <div class="product-card">
+                                <h4>${produto.nome}</h4>
+                                <p><strong>Preço:</strong> R$ ${parseFloat(produto.preco).toFixed(2)}</p>
+                                ${produto.descricao ? `<p><strong>Descrição:</strong> ${produto.descricao}</p>` : ''}
+                                ${produto.data_atualizado ? `<p><strong>Atualizado:</strong> ${new Date(produto.data_atualizado).toLocaleDateString('pt-BR')}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = `<div class="alert alert-error">Erro ao carregar produtos: ${error.message}</div>`;
+            }
+        }
+
+        // Função de login
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const usuarioElement = document.getElementById('usuario');
+            const senhaElement = document.getElementById('senha');
+            const resultDiv = document.getElementById('login-result');
+            
+            if (!usuarioElement || !senhaElement) {
+                console.error('Elementos do formulário não encontrados');
+                return;
+            }
+            
+            const usuario = usuarioElement.value;
+            const senha = senhaElement.value;
+            
+            resultDiv.innerHTML = '<div class="loading">⏳ Autenticando...</div>';
+            
+            try {
+                const response = await apiRequest('/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ usuario, senha })
+                });
+                
+                // Tratar tanto resposta com objeto quanto apenas token
+                if (typeof response === 'string') {
+                    authToken = response;
+                    currentUser = { usuario: usuario };
+                } else {
+                    authToken = response.token;
+                    currentUser = response.user || { usuario: usuario };
+                }
+                
+                // Salvar no localStorage
+                localStorage.setItem('auth_token', authToken);
+                localStorage.setItem('current_user', JSON.stringify(currentUser));
+                
+                updateAuthStatus();
+                showAdminArea();
+                showToast('🎉 Login realizado com sucesso!');
+                
+            } catch (error) {
+                console.error('Erro no login:', error);
+                resultDiv.innerHTML = `<div class="alert alert-error">❌ ${error.message}</div>`;
+            }
+        }
+
+        // Mostrar área administrativa
+        function showAdminArea() {
+            document.getElementById('login-form-container').style.display = 'none';
+            document.getElementById('admin-area').style.display = 'block';
+        }
+
+        // Esconder área administrativa
+        function hideAdminArea() {
+            document.getElementById('login-form-container').style.display = 'block';
+            document.getElementById('admin-area').style.display = 'none';
+            document.getElementById('usuarios-lista').innerHTML = '';
+            document.getElementById('clientes-lista').innerHTML = '';
+        }
+
+        // Função de logout
+        function logout() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('current_user');
+            
+            updateAuthStatus();
+            hideAdminArea();
+            showToast('🚪 Logout realizado com sucesso!');
+        }
+
+        // Atualizar status de autenticação
+        function updateAuthStatus() {
+            const authStatus = document.getElementById('auth-status');
+            const loginBtn = document.getElementById('login-btn');
+            
+            if (authToken && currentUser) {
+                const displayName = currentUser.usuario || currentUser.email?.split('@')[0] || 'Usuário';
+                authStatus.innerHTML = `✅ ${displayName}`;
+                authStatus.style.background = 'rgba(76, 175, 80, 0.8)';
+                loginBtn.textContent = '👤 Admin';
+            } else {
+                authStatus.innerHTML = '❌ Não logado';
+                authStatus.style.background = 'rgba(244, 67, 54, 0.8)';
+                loginBtn.textContent = '🔐 Área Restrita';
+            }
+        }
+
+        // Lidar com clique no status de autenticação
+        function handleAuthClick() {
+            if (authToken) {
+                if (confirm('Deseja fazer logout?')) {
+                    logout();
+                }
+            } else {
+                showSection('login');
+            }
+        }
+
+        // Carregar usuários
+        async function loadUsers() {
+            const container = document.getElementById('usuarios-lista');
+            container.innerHTML = '<div class="loading">⏳ Carregando usuários...</div>';
+            
+            try {
+                // Força um novo request sem cache
+                const usuarios = await apiRequest('/usuarios?' + Date.now());
+                console.log('Dados dos usuários recebidos:', usuarios);
+                
+                // Debug: mostrar as chaves do primeiro usuário
+                if (usuarios && usuarios.length > 0) {
+                    console.log('Chaves do primeiro usuário:', Object.keys(usuarios[0]));
+                    console.log('Primeiro usuário completo:', usuarios[0]);
+                }
+                
+                const html = `
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Usuário</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${usuarios.map(usuario => `
+                                    <tr>
+                                        <td>${usuario.id || 'N/A'}</td>
+                                        <td>${usuario.usuario || 'N/A'}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+                container.innerHTML = `<div class="alert alert-error">Erro ao carregar usuários: ${error.message}</div>`;
+            }
+        }
+
+        // Carregar clientes
+        async function loadClients() {
+            const container = document.getElementById('clientes-lista');
+            container.innerHTML = '<div class="loading">⏳ Carregando clientes...</div>';
+            
+            try {
+                // Força um novo request sem cache
+                const clientes = await apiRequest('/clientes?' + Date.now());
+                console.log('Dados dos clientes recebidos:', clientes);
+                
+                // Debug: mostrar as chaves do primeiro cliente
+                if (clientes && clientes.length > 0) {
+                    console.log('Chaves do primeiro cliente:', Object.keys(clientes[0]));
+                    console.log('Primeiro cliente completo:', clientes[0]);
+                }
+                
+                const html = `
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Sobrenome</th>
+                                    <th>Email</th>
+                                    <th>Idade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${clientes.map(cliente => `
+                                    <tr>
+                                        <td>${cliente.id || 'N/A'}</td>
+                                        <td>${cliente.nome || 'N/A'}</td>
+                                        <td>${cliente.sobrenome || 'N/A'}</td>
+                                        <td>${cliente.email || 'N/A'}</td>
+                                        <td>${cliente.idade || 'N/A'}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Erro ao carregar clientes:', error);
+                container.innerHTML = `<div class="alert alert-error">Erro ao carregar clientes: ${error.message}</div>`;
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado, inicializando aplicação...');
+            
+            // Verificar se já está logado
+            const savedToken = localStorage.getItem('auth_token');
+            const savedUser = localStorage.getItem('current_user');
+            
+            if (savedToken && savedUser) {
+                try {
+                    authToken = savedToken;
+                    currentUser = JSON.parse(savedUser);
+                    updateAuthStatus();
+                } catch (e) {
+                    console.error('Erro ao carregar dados salvos:', e);
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('current_user');
+                    updateAuthStatus();
+                }
+            } else {
+                updateAuthStatus();
+            }
+            
+            // Configurar form de login com delay para garantir que existe
+            setTimeout(() => {
+                const loginForm = document.getElementById('login-form');
+                if (loginForm) {
+                    loginForm.addEventListener('submit', handleLogin);
+                    console.log('Event listener do login configurado');
+                } else {
+                    console.error('Formulário de login não encontrado');
+                }
+            }, 100);
+            
+            // Carregar produtos na inicialização
+            loadProducts();
+        });
+    </script>
+</body>
+</html> 

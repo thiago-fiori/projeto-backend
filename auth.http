@@ -1,0 +1,25 @@
+# Variáveis
+@baseUrl = http://localhost:3000
+@token = ""
+
+### Login
+# @name login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "usuario": "seu_usuario_aqui",
+  "senha": "sua_senha_aqui"
+}
+
+### Capturar Token (Instrução)
+# Após a requisição de Login ser bem-sucedida,
+# copie o valor do campo 'token' da resposta.
+# Cole o token na variável @token acima, substituindo o valor atual.
+# Exemplo: @token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+### Logout
+# @name logout
+POST {{baseUrl}}/logout
+Authorization: Bearer {{token}}
+Content-Type: application/json 
