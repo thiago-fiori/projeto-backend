@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { getConnection } = require('../config/database');
+require('dotenv').config();
 
 const SECRET = process.env.JWT_SECRET || 'segredo_teste';
+
 const blacklist = new Set();
 
 // Mock apenas para testes
@@ -26,6 +28,8 @@ async function login(usuario, senha) {
   );
 
   const user = rows[0];
+
+
   if (!user || !(await bcrypt.compare(senha, user.senha))) {
     throw new Error('Usuário ou senha inválidos');
   }

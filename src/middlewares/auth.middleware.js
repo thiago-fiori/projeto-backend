@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 const authService = require('../services/auth.service');
+require('dotenv').config();
 
 const SECRET = process.env.JWT_SECRET || 'segredo_teste';
+console.log('SECRET:', SECRET);
 
 async function authMiddleware(req, reply, done) {
   try {

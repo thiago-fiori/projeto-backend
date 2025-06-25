@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
+
 // Registrar plugins, se houver (ex: fastify-cors, fastify-swagger)
 // fastify.register(require('@fastify/cors'), { origin: '*' });
 
@@ -21,4 +22,4 @@ const start = async () => {
   }
 };
 
-start(); 
+start();

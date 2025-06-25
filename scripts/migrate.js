@@ -96,6 +96,7 @@ async function executeSQLFile(connection, filePath, config) {
         id INT AUTO_INCREMENT PRIMARY KEY,
         usuario VARCHAR(255) NOT NULL UNIQUE,
         senha VARCHAR(255) NOT NULL,
+        token VARCHAR(512),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )`,

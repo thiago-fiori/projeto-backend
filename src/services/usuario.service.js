@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const { getConnection } = require('../config/database');
+require('dotenv').config();
 
 const SALT_ROUNDS = 10;
 
