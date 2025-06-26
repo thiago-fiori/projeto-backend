@@ -4,7 +4,7 @@ Siga os passos abaixo para configurar o projeto localmente.
 
 **1. Clonar o Repositório**
 
-Primeiro, clone este repositório para a sua máquina local usando o seguinte comando:
+Primeiro, clone este repositório para a sua máquina local.:
 
 **2. Acessar a Pasta do Projeto**
 
