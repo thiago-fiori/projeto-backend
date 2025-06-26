@@ -1,3 +1,13 @@
+## 📝 Pré-requisitos
+
+Antes de começar, certifique-se de ter os seguintes softwares instalados em sua máquina:
+
+* **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**: Essencial para a criação e gerenciamento dos contêineres da aplicação.
+* **[WSL (Subsistema do Windows para Linux)](https://docs.microsoft.com/pt-br/windows/wsl/install)**: Necessário para garantir a compatibilidade e o ambiente de execução no Windows.
+* **[Postman](https://www.postman.com/downloads/)**: Ferramenta utilizada para realizar as requisições à API.
+
+---
+
 ## ⚙️ Configuração do Ambiente
 
 Siga os passos abaixo para configurar o projeto localmente.
